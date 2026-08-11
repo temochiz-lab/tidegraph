@@ -1,10 +1,10 @@
 const SVG_NS = "http://www.w3.org/2000/svg";
 
 function renderTideGraph(root, day, options) {
-  const { dateKey, todayKey, nowParts, onPointSelect } = options;
+  const { dateKey, todayKey, nowParts, chanceWindows = [], onPointSelect } = options;
   const width = 720;
-  const height = 380;
-  const margin = { top: 34, right: 22, bottom: 44, left: 48 };
+  const height = 500;
+  const margin = { top: 42, right: 24, bottom: 48, left: 48 };
   const plotWidth = width - margin.left - margin.right;
   const plotHeight = height - margin.top - margin.bottom;
   const levels = [
@@ -28,6 +28,7 @@ function renderTideGraph(root, day, options) {
     element("desc", { id: "graphDesc" }, `${dateKey}の毎時潮位、満潮、干潮、現在時刻線`)
   );
 
+  drawChanceWindows(svg, chanceWindows, { margin, plotWidth, plotHeight });
   drawGrid(svg, { width, height, margin, plotWidth, plotHeight, minLevel, maxLevel });
 
   const points = day.hourly.map((level, hour) => ({
@@ -84,6 +85,28 @@ function renderTideGraph(root, day, options) {
 
   root.replaceChildren(svg);
   return { minLevel, maxLevel };
+}
+
+function drawChanceWindows(svg, windows, geometry) {
+  const { margin, plotWidth, plotHeight } = geometry;
+  for (const windowItem of windows) {
+    const startX = margin.left + (windowItem.startHour / 24) * plotWidth;
+    const endX = margin.left + (windowItem.endHour / 24) * plotWidth;
+    const width = Math.max(2, endX - startX);
+    svg.append(element("rect", {
+      class: "chance-band",
+      x: startX,
+      y: margin.top,
+      width,
+      height: plotHeight
+    }));
+    svg.append(element("text", {
+      class: "chance-label",
+      x: startX + width / 2,
+      y: margin.top + 18,
+      "text-anchor": "middle"
+    }, windowItem.label));
+  }
 }
 
 function drawGrid(svg, geometry) {

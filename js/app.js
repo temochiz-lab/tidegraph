@@ -2,11 +2,9 @@
 const { getDayRecord, loadStations, loadYearData, pickStation } = window.TideGraphData;
 
 const elements = {
-  connectionStatus: document.querySelector("#connectionStatus"),
-  loadingStatus: document.querySelector("#loadingStatus"),
-  dateLoadingStatus: document.querySelector("#dateLoadingStatus"),
   stationSelect: document.querySelector("#stationSelect"),
   dateInput: document.querySelector("#dateInput"),
+  tideInfo: document.querySelector("#tideInfo"),
   nextTide: document.querySelector("#nextTide"),
   graphRoot: document.querySelector("#graphRoot"),
   rangeLabel: document.querySelector("#rangeLabel"),
@@ -29,13 +27,9 @@ let refreshSequence = 0;
 init().catch((error) => showFatal(error));
 
 async function init() {
-  updateConnectionStatus();
-  window.addEventListener("online", updateConnectionStatus);
-  window.addEventListener("offline", updateConnectionStatus);
-
   if ("serviceWorker" in navigator) {
     navigator.serviceWorker.register("./sw.js").catch(() => {
-      showMessage("Service Workerを登録できませんでした。HTTPサーバー経由で開いてください。");
+      showMessage("Service Workerを登録できませんでした。HTTPサーバー経由で開くとオフライン機能が使えます。");
     });
   }
 
@@ -62,22 +56,18 @@ function bindEvents() {
     await refresh();
   });
 
-  const handleDateInput = async () => {
-    if (elements.dateInput.value) {
-      if (elements.dateInput.value === state.dateKey) {
-        return;
-      }
-      state.dateKey = elements.dateInput.value;
-      updateUrl();
-      if (hasLoadedYearDataFor(state.dateKey)) {
-        renderCurrentDay();
-        return;
-      }
-      await refresh();
+  elements.dateInput.addEventListener("change", async () => {
+    if (!elements.dateInput.value || elements.dateInput.value === state.dateKey) {
+      return;
     }
-  };
-
-  elements.dateInput.addEventListener("change", handleDateInput);
+    state.dateKey = elements.dateInput.value;
+    updateUrl();
+    if (hasLoadedYearDataFor(state.dateKey)) {
+      renderCurrentDay();
+      return;
+    }
+    await refresh();
+  });
 
   elements.todayButton.addEventListener("click", () => setDate(getJstDateKey()));
 }
@@ -90,22 +80,17 @@ async function refresh() {
 
   try {
     const year = state.dateKey.slice(0, 4);
-    if (!state.yearData || state.yearData.year !== Number(year) || state.yearData.station?.code !== state.station.code) {
-      setLoading(true);
-      showDateSwitchingContent(state.dateKey);
-      await waitForPaint();
+    if (!hasLoadedYearDataFor(state.dateKey)) {
       state.yearData = await loadYearData(year, state.station.code);
     }
-    renderCurrentDay();
+    if (sequence === refreshSequence) {
+      renderCurrentDay();
+    }
   } catch (error) {
     elements.graphRoot.replaceChildren();
     elements.nextTide.textContent = "表示できる潮汐データがありません";
     updateCurrentTimeTimer();
     showMessage(!navigator.onLine ? "初回読み込みには通信が必要です" : error.message);
-  } finally {
-    if (sequence === refreshSequence) {
-      setLoading(false);
-    }
   }
 }
 
@@ -126,30 +111,47 @@ function renderCurrentDay() {
     dateKey: state.dateKey,
     todayKey: getJstDateKey(),
     nowParts: getJstNowParts(),
+    chanceWindows: buildFishingChanceWindows(day),
     onPointSelect: (hour, level) => {
       elements.pointReadout.textContent = `${String(hour).padStart(2, "0")}:00 ${level}cm`;
     }
   });
   elements.rangeLabel.textContent = `${Math.round(graphRange.minLevel)} - ${Math.round(graphRange.maxLevel)} cm`;
+  elements.tideInfo.textContent = buildTideInfoText(state.dateKey);
   elements.nextTide.innerHTML = buildNextTideHtml(day, state.dateKey);
   elements.dataUpdated.textContent = `最終データ更新日: ${state.yearData.generatedAt || "不明"}`;
   updateCurrentTimeTimer();
 }
 
 function buildStationOptions() {
+  const groups = new Map();
+  for (const station of state.stations) {
+    const region = station.region || "その他";
+    if (!groups.has(region)) {
+      groups.set(region, []);
+    }
+    groups.get(region).push(station);
+  }
+
   elements.stationSelect.replaceChildren(
-    ...state.stations.map((station) => {
-      const option = document.createElement("option");
-      option.value = station.code;
-      option.textContent = `${station.name} (${station.code})`;
-      return option;
+    ...Array.from(groups, ([region, stations]) => {
+      const group = document.createElement("optgroup");
+      group.label = region;
+      for (const station of stations) {
+        const option = document.createElement("option");
+        option.value = station.code;
+        option.textContent = `${station.name} (${station.code})`;
+        group.append(option);
+      }
+      return group;
     })
   );
 }
 
 function buildNextTideHtml(day, dateKey) {
   const nowKey = getJstDateKey();
-  const nowHour = getJstNowParts().hour + getJstNowParts().minute / 60;
+  const nowParts = getJstNowParts();
+  const nowHour = nowParts.hour + nowParts.minute / 60;
   const events = [
     ...(day.highs || []).map((item) => ({ ...item, kind: "満潮" })),
     ...(day.lows || []).map((item) => ({ ...item, kind: "干潮" }))
@@ -160,6 +162,63 @@ function buildNextTideHtml(day, dateKey) {
   }
   const all = events.map((item) => `${item.kind} ${item.time} ${item.level}cm`).join(" / ");
   return `${next.kind} ${next.time} ${next.level}cm<small>この日の満干潮: ${all}</small>`;
+}
+
+function buildFishingChanceWindows(day) {
+  const events = [
+    ...(day.highs || []).map((item) => ({ ...item, kind: "high" })),
+    ...(day.lows || []).map((item) => ({ ...item, kind: "low" }))
+  ].sort((a, b) => timeToFloat(a.time) - timeToFloat(b.time));
+  const windows = [];
+  for (let index = 0; index < events.length - 1; index += 1) {
+    const current = events[index];
+    const next = events[index + 1];
+    const startHour = timeToFloat(current.time);
+    const endHour = timeToFloat(next.time);
+    const span = endHour - startHour;
+    if (span <= 0) {
+      continue;
+    }
+    if (current.kind === "low" && next.kind === "high") {
+      windows.push(makeChanceWindow(startHour + span * 0.3, "上げ三分"));
+    }
+    if (current.kind === "high" && next.kind === "low") {
+      windows.push(makeChanceWindow(startHour + span * 0.7, "下げ七分"));
+    }
+  }
+  return windows;
+}
+
+function makeChanceWindow(centerHour, label) {
+  const halfWidthHours = 0.45;
+  return {
+    startHour: Math.max(0, centerHour - halfWidthHours),
+    endHour: Math.min(24, centerHour + halfWidthHours),
+    label
+  };
+}
+
+function buildTideInfoText(dateKey) {
+  const lunarAge = getApproximateLunarAge(dateKey);
+  return `潮回り: ${getTideCycleName(lunarAge)} / 月齢 約${lunarAge.toFixed(1)}`;
+}
+
+function getApproximateLunarAge(dateKey) {
+  const [year, month, day] = dateKey.split("-").map(Number);
+  const date = Date.UTC(year, month - 1, day, 12, 0, 0);
+  const knownNewMoon = Date.UTC(2000, 0, 6, 18, 14, 0);
+  const synodicMonthDays = 29.530588853;
+  const days = (date - knownNewMoon) / 86_400_000;
+  return ((days % synodicMonthDays) + synodicMonthDays) % synodicMonthDays;
+}
+
+function getTideCycleName(lunarAge) {
+  const tideAge = Math.floor(lunarAge + 0.5) % 30;
+  if ([28, 29, 0, 1, 2, 14, 15, 16, 17].includes(tideAge)) return "大潮";
+  if ([7, 8, 9, 22, 23, 24].includes(tideAge)) return "小潮";
+  if ([10, 25].includes(tideAge)) return "長潮";
+  if ([11, 26].includes(tideAge)) return "若潮";
+  return "中潮";
 }
 
 async function setDate(dateKey) {
@@ -173,45 +232,6 @@ async function setDate(dateKey) {
     return;
   }
   await refresh();
-}
-
-function updateConnectionStatus() {
-  elements.connectionStatus.textContent = navigator.onLine ? "online" : "offline";
-  elements.connectionStatus.classList.toggle("offline", !navigator.onLine);
-}
-
-function setLoading(isLoading) {
-  elements.loadingStatus.hidden = !isLoading;
-  elements.dateLoadingStatus.hidden = !isLoading;
-  document.body.classList.toggle("is-loading", isLoading);
-  elements.stationSelect.disabled = isLoading;
-  elements.todayButton.disabled = isLoading;
-  elements.todayButton.textContent = isLoading ? "読込中" : "今日";
-}
-
-function showDateSwitchingContent(dateKey, fallbackLabel = "日付を切り替え中...") {
-  const label = dateKey ? `${dateKey} を読み込み中...` : fallbackLabel;
-  elements.rangeLabel.textContent = "読み込み中";
-  elements.pointReadout.textContent = "日付を切り替えています。";
-  elements.nextTide.innerHTML = `
-    <span class="inline-loading">
-      <span class="mini-spinner" aria-hidden="true"></span>
-      ${label}
-    </span>
-  `;
-  const graphLoading = document.createElement("div");
-  graphLoading.className = "graph-loading";
-  graphLoading.innerHTML = `
-    <span class="inline-loading">
-      <span class="mini-spinner" aria-hidden="true"></span>
-      ${label}
-    </span>
-  `;
-  elements.graphRoot.replaceChildren(graphLoading);
-}
-
-function waitForPaint() {
-  return new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 }
 
 function updateCurrentTimeTimer() {
@@ -247,7 +267,6 @@ function clearMessage() {
 }
 
 function showFatal(error) {
-  setLoading(false);
   showMessage(error.message || "アプリを起動できませんでした");
 }
 

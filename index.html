@@ -4,23 +4,19 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
     <meta name="theme-color" content="#f8fbff">
-    <meta name="description" content="iPhoneホーム画面から1タップで開ける釣り用タイドグラフPWA">
+    <meta name="description" content="iPhoneのホーム画面から1タップで開ける釣り用タイドグラフPWA">
     <title>TideGraph</title>
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="icon" href="./icons/icon-192.png">
     <link rel="apple-touch-icon" href="./icons/icon-192.png">
-    <link rel="stylesheet" href="./css/app.css?v=20260811-10">
+    <link rel="stylesheet" href="./css/app.css?v=20260811-16">
   </head>
   <body>
-    <div class="loading-overlay" id="loadingStatus" role="status" aria-live="polite" hidden>
-      <span class="spinner" aria-hidden="true"></span>
-      <span>読み込み中...</span>
-    </div>
     <main class="app-shell">
       <section class="controls" aria-label="表示条件">
         <div class="controls-top">
           <p class="eyebrow">TideGraph</p>
-          <div class="status-pill" id="connectionStatus">online</div>
+          <p class="edition-badge">2026年版</p>
         </div>
         <div class="picker-row">
           <label class="station-picker">
@@ -30,16 +26,13 @@
             <div class="date-picker-row">
               <input id="dateInput" type="date" aria-label="日付">
               <button id="todayButton" type="button">今日</button>
-              <span class="date-loading-chip" id="dateLoadingStatus" role="status" aria-live="polite" hidden>
-                <span class="mini-spinner" aria-hidden="true"></span>
-                読み込み中...
-              </span>
             </div>
           </div>
         </div>
         <div class="tide-summary" aria-live="polite">
           <h2>次の満潮・干潮</h2>
-          <div id="nextTide" class="next-tide">データを読み込み中です</div>
+          <div id="tideInfo" class="tide-info">潮回りを計算中</div>
+          <div id="nextTide" class="next-tide">--</div>
         </div>
       </section>
 
@@ -61,9 +54,9 @@
       </footer>
     </main>
 
-    <script src="./data/2026/TK.js?v=20260811-10"></script>
-    <script src="./js/tide-graph.js?v=20260811-10"></script>
-    <script src="./js/data.js?v=20260811-10"></script>
-    <script src="./js/app.js?v=20260811-10"></script>
+    <script src="./data/2026/TK.js?v=20260811-16"></script>
+    <script src="./js/tide-graph.js?v=20260811-16"></script>
+    <script src="./js/data.js?v=20260811-16"></script>
+    <script src="./js/app.js?v=20260811-16"></script>
   </body>
 </html>
