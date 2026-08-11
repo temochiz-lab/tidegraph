@@ -239,6 +239,12 @@ h2 {
   font-size: 11px;
 }
 
+.axis-label {
+  fill: var(--ink);
+  font-size: 18px;
+  font-weight: 800;
+}
+
 .tide-line {
   fill: none;
   stroke: var(--accent);
@@ -262,10 +268,26 @@ h2 {
   fill: var(--low);
 }
 
+.now-band {
+  fill: #f97316;
+  opacity: 0.18;
+}
+
 .now-line {
-  stroke: #f59e0b;
-  stroke-dasharray: 5 5;
-  stroke-width: 2;
+  stroke: #ea580c;
+  stroke-linecap: round;
+  stroke-width: 3.6;
+}
+
+.now-label-bg {
+  fill: #ea580c;
+  filter: drop-shadow(0 3px 6px rgba(124, 45, 18, 0.22));
+}
+
+.now-label {
+  fill: #fff;
+  font-size: 18px;
+  font-weight: 800;
 }
 
 .message {
@@ -370,7 +392,10 @@ h2 {
     font-size: 0.82rem;
   }
 
-  .axis-label,
+  .axis-label {
+    font-size: 18px;
+  }
+
   .marker-label,
   .chance-label {
     font-size: 10px;

@@ -69,22 +69,51 @@ function renderTideGraph(root, day, options) {
   if (dateKey === todayKey && nowParts) {
     const hourFloat = nowParts.hour + nowParts.minute / 60 + nowParts.second / 3600;
     const x = margin.left + (hourFloat / 24) * plotWidth;
-    svg.append(element("line", {
-      class: "now-line",
-      x1: x,
-      y1: margin.top,
-      x2: x,
-      y2: margin.top + plotHeight
-    }));
-    svg.append(element("text", {
-      class: "marker-label",
-      x: Math.min(width - 58, x + 6),
-      y: margin.top + 14
-    }, "現在"));
+    drawNowMarker(svg, x, { width, margin, plotHeight });
   }
 
   root.replaceChildren(svg);
   return { minLevel, maxLevel };
+}
+
+function drawNowMarker(svg, x, geometry) {
+  const { width, margin, plotHeight } = geometry;
+  const bandWidth = 18;
+  const bandX = Math.max(margin.left, Math.min(width - margin.right - bandWidth, x - bandWidth / 2));
+  const labelWidth = 68;
+  const labelHeight = 32;
+  const labelX = Math.max(margin.left, Math.min(width - margin.right - labelWidth, x - labelWidth / 2));
+  const labelY = margin.top - 40;
+
+  svg.append(element("rect", {
+    class: "now-band",
+    x: bandX,
+    y: margin.top,
+    width: bandWidth,
+    height: plotHeight,
+    rx: 9
+  }));
+  svg.append(element("line", {
+    class: "now-line",
+    x1: x,
+    y1: margin.top,
+    x2: x,
+    y2: margin.top + plotHeight
+  }));
+  svg.append(element("rect", {
+    class: "now-label-bg",
+    x: labelX,
+    y: labelY,
+    width: labelWidth,
+    height: labelHeight,
+    rx: 11
+  }));
+  svg.append(element("text", {
+    class: "now-label",
+    x: labelX + labelWidth / 2,
+    y: labelY + 22,
+    "text-anchor": "middle"
+  }, "現在"));
 }
 
 function drawChanceWindows(svg, windows, geometry) {

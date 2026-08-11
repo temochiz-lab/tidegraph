@@ -1,6 +1,6 @@
 {
-  "name": "TideGraph",
-  "short_name": "Tide",
+  "name": "temochiz潮時表",
+  "short_name": "temochiz潮時表",
   "start_url": "./",
   "scope": "./",
   "display": "standalone",

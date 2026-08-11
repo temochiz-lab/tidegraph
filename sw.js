@@ -1,4 +1,4 @@
-const CACHE_VERSION = "tidegraph-v0.1.3";
+const CACHE_VERSION = "tidegraph-v0.1.6";
 const APP_CACHE = `${CACHE_VERSION}-app`;
 const DATA_CACHE = `${CACHE_VERSION}-data`;
 
