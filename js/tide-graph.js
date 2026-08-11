@@ -1,0 +1,175 @@
+const SVG_NS = "http://www.w3.org/2000/svg";
+
+export function renderTideGraph(root, day, options) {
+  const { dateKey, todayKey, nowParts, onPointSelect } = options;
+  const width = 720;
+  const height = 380;
+  const margin = { top: 34, right: 22, bottom: 44, left: 48 };
+  const plotWidth = width - margin.left - margin.right;
+  const plotHeight = height - margin.top - margin.bottom;
+  const levels = [
+    ...day.hourly,
+    ...(day.highs || []).map((item) => item.level),
+    ...(day.lows || []).map((item) => item.level)
+  ];
+  const rawMin = Math.min(...levels);
+  const rawMax = Math.max(...levels);
+  const span = Math.max(rawMax - rawMin, 10);
+  const padding = Math.max(8, Math.ceil(span * 0.08));
+  const minLevel = rawMin - padding;
+  const maxLevel = rawMax + padding;
+
+  const svg = element("svg", {
+    viewBox: `0 0 ${width} ${height}`,
+    "aria-labelledby": "graphTitle graphDesc"
+  });
+  svg.append(
+    element("title", { id: "graphTitle" }, "24時間タイドグラフ"),
+    element("desc", { id: "graphDesc" }, `${dateKey}の毎時潮位、満潮、干潮、現在時刻線`)
+  );
+
+  drawGrid(svg, { width, height, margin, plotWidth, plotHeight, minLevel, maxLevel });
+
+  const points = day.hourly.map((level, hour) => ({
+    hour,
+    level,
+    x: xForHour(hour, margin.left, plotWidth),
+    y: yForLevel(level, margin.top, plotHeight, minLevel, maxLevel)
+  }));
+
+  svg.append(element("polyline", {
+    class: "tide-line",
+    points: points.map((point) => `${point.x},${point.y}`).join(" ")
+  }));
+
+  for (const point of points) {
+    const circle = element("circle", {
+      class: "tide-point",
+      cx: point.x,
+      cy: point.y,
+      r: 4.4,
+      tabindex: "0",
+      role: "button",
+      "aria-label": `${String(point.hour).padStart(2, "0")}:00 ${point.level}cm`
+    });
+    circle.addEventListener("click", () => onPointSelect?.(point.hour, point.level));
+    circle.addEventListener("keydown", (event) => {
+      if (event.key === "Enter" || event.key === " ") {
+        event.preventDefault();
+        onPointSelect?.(point.hour, point.level);
+      }
+    });
+    svg.append(circle);
+  }
+
+  drawMarkers(svg, day.highs || [], "満潮", "marker-high", margin, plotWidth, plotHeight, minLevel, maxLevel);
+  drawMarkers(svg, day.lows || [], "干潮", "marker-low", margin, plotWidth, plotHeight, minLevel, maxLevel);
+
+  if (dateKey === todayKey && nowParts) {
+    const hourFloat = nowParts.hour + nowParts.minute / 60 + nowParts.second / 3600;
+    const x = margin.left + (hourFloat / 24) * plotWidth;
+    svg.append(element("line", {
+      class: "now-line",
+      x1: x,
+      y1: margin.top,
+      x2: x,
+      y2: margin.top + plotHeight
+    }));
+    svg.append(element("text", {
+      class: "marker-label",
+      x: Math.min(width - 58, x + 6),
+      y: margin.top + 14
+    }, "現在"));
+  }
+
+  root.replaceChildren(svg);
+  return { minLevel, maxLevel };
+}
+
+function drawGrid(svg, geometry) {
+  const { width, height, margin, plotWidth, plotHeight, minLevel, maxLevel } = geometry;
+  for (let hour = 0; hour <= 24; hour += 3) {
+    const x = margin.left + (hour / 24) * plotWidth;
+    svg.append(element("line", {
+      class: "grid-line",
+      x1: x,
+      y1: margin.top,
+      x2: x,
+      y2: margin.top + plotHeight
+    }));
+    svg.append(element("text", {
+      class: "axis-label",
+      x,
+      y: height - 16,
+      "text-anchor": "middle"
+    }, `${hour}`));
+  }
+
+  const ticks = makeLevelTicks(minLevel, maxLevel);
+  for (const level of ticks) {
+    const y = yForLevel(level, margin.top, plotHeight, minLevel, maxLevel);
+    svg.append(element("line", {
+      class: "grid-line",
+      x1: margin.left,
+      y1: y,
+      x2: width - margin.right,
+      y2: y
+    }));
+    svg.append(element("text", {
+      class: "axis-label",
+      x: margin.left - 8,
+      y: y + 4,
+      "text-anchor": "end"
+    }, `${level}`));
+  }
+}
+
+function drawMarkers(svg, items, label, className, margin, plotWidth, plotHeight, minLevel, maxLevel) {
+  for (const item of items) {
+    const hour = timeToHour(item.time);
+    const x = margin.left + (hour / 24) * plotWidth;
+    const y = yForLevel(item.level, margin.top, plotHeight, minLevel, maxLevel);
+    svg.append(element("circle", { class: className, cx: x, cy: y, r: 7 }));
+    svg.append(element("text", {
+      class: "marker-label",
+      x,
+      y: y - 12,
+      "text-anchor": "middle"
+    }, `${label} ${item.time} ${item.level}cm`));
+  }
+}
+
+function xForHour(hour, left, plotWidth) {
+  return left + (hour / 23) * plotWidth;
+}
+
+function yForLevel(level, top, plotHeight, minLevel, maxLevel) {
+  return top + ((maxLevel - level) / (maxLevel - minLevel)) * plotHeight;
+}
+
+function timeToHour(time) {
+  const [hour, minute] = time.split(":").map(Number);
+  return hour + minute / 60;
+}
+
+function makeLevelTicks(min, max) {
+  const span = max - min;
+  const step = span > 180 ? 50 : span > 80 ? 25 : 10;
+  const first = Math.ceil(min / step) * step;
+  const ticks = [];
+  for (let value = first; value <= max; value += step) {
+    ticks.push(value);
+  }
+  return ticks;
+}
+
+function element(name, attrs = {}, text) {
+  const node = document.createElementNS(SVG_NS, name);
+  for (const [key, value] of Object.entries(attrs)) {
+    node.setAttribute(key, value);
+  }
+  if (text !== undefined) {
+    node.textContent = text;
+  }
+  return node;
+}

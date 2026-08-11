@@ -1,0 +1,9 @@
+{
+  "stations": [
+    {
+      "code": "TK",
+      "name": "東京",
+      "default": true
+    }
+  ]
+}

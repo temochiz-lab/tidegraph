@@ -1,0 +1,10 @@
+{
+  "name": "tidegraph-pwa",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "data:import": "node scripts/import-jma-tides.mjs --year 2026 --station TK --name 東京",
+    "test": "node --test"
+  }
+}
