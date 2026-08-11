@@ -12,6 +12,14 @@
 
 現在は2026年版です。2027年以降のデータが必要になった場合は、リポジトリのIssueで知らせてください。
 
+## スマホで開く
+
+スマホでは、以下のURLを開くか、QRコードを読み取ってください。
+
+[https://temochiz-lab.github.io/tidegraph/](https://temochiz-lab.github.io/tidegraph/)
+
+![TideGraphのスマホ用QRコード](assets/tidegraph-qr.png)
+
 ## iPhoneでホーム画面に追加する方法
 
 1. iPhoneのSafariでTideGraphを開きます。
