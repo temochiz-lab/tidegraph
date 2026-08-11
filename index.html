@@ -9,34 +9,38 @@
     <link rel="manifest" href="./manifest.webmanifest">
     <link rel="icon" href="./icons/icon-192.png">
     <link rel="apple-touch-icon" href="./icons/icon-192.png">
-    <link rel="stylesheet" href="./css/app.css">
+    <link rel="stylesheet" href="./css/app.css?v=20260811-10">
   </head>
   <body>
+    <div class="loading-overlay" id="loadingStatus" role="status" aria-live="polite" hidden>
+      <span class="spinner" aria-hidden="true"></span>
+      <span>読み込み中...</span>
+    </div>
     <main class="app-shell">
-      <header class="hero">
-        <div>
-          <p class="eyebrow">TideGraph</p>
-          <h1 id="stationName">潮位を読み込み中</h1>
-          <p id="dateLabel" class="date-label">--</p>
-        </div>
-        <div class="status-pill" id="connectionStatus">online</div>
-      </header>
-
       <section class="controls" aria-label="表示条件">
-        <label class="station-picker visually-compact">
-          <select id="stationSelect"></select>
-        </label>
-        <div class="date-picker">
-          <div class="date-picker-row">
-            <input id="dateInput" type="date">
-            <button id="todayButton" type="button">今日</button>
+        <div class="controls-top">
+          <p class="eyebrow">TideGraph</p>
+          <div class="status-pill" id="connectionStatus">online</div>
+        </div>
+        <div class="picker-row">
+          <label class="station-picker">
+            <select id="stationSelect" aria-label="地点"></select>
+          </label>
+          <div class="date-picker">
+            <div class="date-picker-row">
+              <input id="dateInput" type="date" aria-label="日付">
+              <button id="todayButton" type="button">今日</button>
+              <span class="date-loading-chip" id="dateLoadingStatus" role="status" aria-live="polite" hidden>
+                <span class="mini-spinner" aria-hidden="true"></span>
+                読み込み中...
+              </span>
+            </div>
           </div>
         </div>
-      </section>
-
-      <section class="summary-card" aria-live="polite">
-        <h2>次の満潮・干潮</h2>
-        <div id="nextTide" class="next-tide">データを読み込み中です</div>
+        <div class="tide-summary" aria-live="polite">
+          <h2>次の満潮・干潮</h2>
+          <div id="nextTide" class="next-tide">データを読み込み中です</div>
+        </div>
       </section>
 
       <section class="graph-card">
@@ -57,6 +61,9 @@
       </footer>
     </main>
 
-    <script type="module" src="./js/app.js"></script>
+    <script src="./data/2026/TK.js?v=20260811-10"></script>
+    <script src="./js/tide-graph.js?v=20260811-10"></script>
+    <script src="./js/data.js?v=20260811-10"></script>
+    <script src="./js/app.js?v=20260811-10"></script>
   </body>
 </html>

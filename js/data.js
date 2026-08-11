@@ -1,14 +1,21 @@
 const STATIONS_URL = "./data/stations.json";
 
-export async function loadStations() {
-  const payload = await fetchJson(STATIONS_URL, "地点一覧を読み込めません");
-  if (!payload || !Array.isArray(payload.stations) || payload.stations.length === 0) {
-    throw new Error("データ形式エラー。再取得してください");
+async function loadStations() {
+  if (window.location.protocol === "file:") {
+    return [{ code: "TK", name: "東京", default: true }];
   }
-  return payload.stations;
+  try {
+    const payload = await fetchJson(STATIONS_URL, "地点一覧を読み込めません");
+    if (payload && Array.isArray(payload.stations) && payload.stations.length > 0) {
+      return payload.stations;
+    }
+  } catch {
+    // file:// in some browsers blocks JSON fetch. Fall back to bundled MVP station data.
+  }
+  return [{ code: "TK", name: "東京", default: true }];
 }
 
-export function pickStation(stations, requestedCode) {
+function pickStation(stations, requestedCode) {
   const normalized = requestedCode?.trim().toUpperCase();
   return (
     stations.find((station) => station.code === normalized) ||
@@ -17,14 +24,18 @@ export function pickStation(stations, requestedCode) {
   );
 }
 
-export async function loadYearData(year, stationCode) {
+async function loadYearData(year, stationCode) {
   const safeYear = String(year).replace(/[^0-9]/g, "");
   const safeStation = String(stationCode).replace(/[^A-Z0-9]/gi, "").toUpperCase();
+  const preloaded = window.TIDEGRAPH_PRELOADED_DATA?.[`${safeYear}/${safeStation}`];
+  if (preloaded) {
+    return preloaded;
+  }
   const url = `./data/${safeYear}/${safeStation}.json`;
   return fetchJson(url, "この地点のデータがありません");
 }
 
-export function getDayRecord(yearData, dateKey) {
+function getDayRecord(yearData, dateKey) {
   if (!yearData || !yearData.days || typeof yearData.days !== "object") {
     throw new Error("データ形式エラー。再取得してください");
   }
@@ -49,3 +60,10 @@ async function fetchJson(url, fallbackMessage) {
     throw new Error("データ形式エラー。再取得してください");
   }
 }
+
+window.TideGraphData = {
+  getDayRecord,
+  loadStations,
+  loadYearData,
+  pickStation
+};

@@ -1,10 +1,10 @@
-import { getDayRecord, loadStations, loadYearData, pickStation } from "./data.js";
-import { renderTideGraph } from "./tide-graph.js";
+(() => {
+const { getDayRecord, loadStations, loadYearData, pickStation } = window.TideGraphData;
 
 const elements = {
-  stationName: document.querySelector("#stationName"),
-  dateLabel: document.querySelector("#dateLabel"),
   connectionStatus: document.querySelector("#connectionStatus"),
+  loadingStatus: document.querySelector("#loadingStatus"),
+  dateLoadingStatus: document.querySelector("#dateLoadingStatus"),
   stationSelect: document.querySelector("#stationSelect"),
   dateInput: document.querySelector("#dateInput"),
   nextTide: document.querySelector("#nextTide"),
@@ -24,6 +24,7 @@ const state = {
 };
 
 let currentTimeTimer = null;
+let refreshSequence = 0;
 
 init().catch((error) => showFatal(error));
 
@@ -61,48 +62,78 @@ function bindEvents() {
     await refresh();
   });
 
-  elements.dateInput.addEventListener("change", async () => {
+  const handleDateInput = async () => {
     if (elements.dateInput.value) {
+      if (elements.dateInput.value === state.dateKey) {
+        return;
+      }
       state.dateKey = elements.dateInput.value;
       updateUrl();
+      if (hasLoadedYearDataFor(state.dateKey)) {
+        renderCurrentDay();
+        return;
+      }
       await refresh();
     }
-  });
+  };
+
+  elements.dateInput.addEventListener("change", handleDateInput);
 
   elements.todayButton.addEventListener("click", () => setDate(getJstDateKey()));
 }
 
 async function refresh() {
+  const sequence = ++refreshSequence;
   clearMessage();
   elements.stationSelect.value = state.station.code;
   elements.dateInput.value = state.dateKey;
-  elements.stationName.textContent = state.station.name;
-  elements.dateLabel.textContent = formatDateLabel(state.dateKey);
 
   try {
     const year = state.dateKey.slice(0, 4);
     if (!state.yearData || state.yearData.year !== Number(year) || state.yearData.station?.code !== state.station.code) {
+      setLoading(true);
+      showDateSwitchingContent(state.dateKey);
+      await waitForPaint();
       state.yearData = await loadYearData(year, state.station.code);
     }
-    const day = getDayRecord(state.yearData, state.dateKey);
-    const graphRange = renderTideGraph(elements.graphRoot, day, {
-      dateKey: state.dateKey,
-      todayKey: getJstDateKey(),
-      nowParts: getJstNowParts(),
-      onPointSelect: (hour, level) => {
-        elements.pointReadout.textContent = `${String(hour).padStart(2, "0")}:00 ${level}cm`;
-      }
-    });
-    elements.rangeLabel.textContent = `${Math.round(graphRange.minLevel)} - ${Math.round(graphRange.maxLevel)} cm`;
-    elements.nextTide.innerHTML = buildNextTideHtml(day, state.dateKey);
-    elements.dataUpdated.textContent = `最終データ更新日: ${state.yearData.generatedAt || "不明"}`;
-    updateCurrentTimeTimer();
+    renderCurrentDay();
   } catch (error) {
     elements.graphRoot.replaceChildren();
     elements.nextTide.textContent = "表示できる潮汐データがありません";
     updateCurrentTimeTimer();
     showMessage(!navigator.onLine ? "初回読み込みには通信が必要です" : error.message);
+  } finally {
+    if (sequence === refreshSequence) {
+      setLoading(false);
+    }
   }
+}
+
+function hasLoadedYearDataFor(dateKey) {
+  return (
+    state.yearData &&
+    state.yearData.year === Number(dateKey.slice(0, 4)) &&
+    state.yearData.station?.code === state.station.code
+  );
+}
+
+function renderCurrentDay() {
+  clearMessage();
+  elements.stationSelect.value = state.station.code;
+  elements.dateInput.value = state.dateKey;
+  const day = getDayRecord(state.yearData, state.dateKey);
+  const graphRange = renderTideGraph(elements.graphRoot, day, {
+    dateKey: state.dateKey,
+    todayKey: getJstDateKey(),
+    nowParts: getJstNowParts(),
+    onPointSelect: (hour, level) => {
+      elements.pointReadout.textContent = `${String(hour).padStart(2, "0")}:00 ${level}cm`;
+    }
+  });
+  elements.rangeLabel.textContent = `${Math.round(graphRange.minLevel)} - ${Math.round(graphRange.maxLevel)} cm`;
+  elements.nextTide.innerHTML = buildNextTideHtml(day, state.dateKey);
+  elements.dataUpdated.textContent = `最終データ更新日: ${state.yearData.generatedAt || "不明"}`;
+  updateCurrentTimeTimer();
 }
 
 function buildStationOptions() {
@@ -132,14 +163,55 @@ function buildNextTideHtml(day, dateKey) {
 }
 
 async function setDate(dateKey) {
+  if (dateKey === state.dateKey) {
+    return;
+  }
   state.dateKey = dateKey;
   updateUrl();
+  if (hasLoadedYearDataFor(state.dateKey)) {
+    renderCurrentDay();
+    return;
+  }
   await refresh();
 }
 
 function updateConnectionStatus() {
   elements.connectionStatus.textContent = navigator.onLine ? "online" : "offline";
   elements.connectionStatus.classList.toggle("offline", !navigator.onLine);
+}
+
+function setLoading(isLoading) {
+  elements.loadingStatus.hidden = !isLoading;
+  elements.dateLoadingStatus.hidden = !isLoading;
+  document.body.classList.toggle("is-loading", isLoading);
+  elements.stationSelect.disabled = isLoading;
+  elements.todayButton.disabled = isLoading;
+  elements.todayButton.textContent = isLoading ? "読込中" : "今日";
+}
+
+function showDateSwitchingContent(dateKey, fallbackLabel = "日付を切り替え中...") {
+  const label = dateKey ? `${dateKey} を読み込み中...` : fallbackLabel;
+  elements.rangeLabel.textContent = "読み込み中";
+  elements.pointReadout.textContent = "日付を切り替えています。";
+  elements.nextTide.innerHTML = `
+    <span class="inline-loading">
+      <span class="mini-spinner" aria-hidden="true"></span>
+      ${label}
+    </span>
+  `;
+  const graphLoading = document.createElement("div");
+  graphLoading.className = "graph-loading";
+  graphLoading.innerHTML = `
+    <span class="inline-loading">
+      <span class="mini-spinner" aria-hidden="true"></span>
+      ${label}
+    </span>
+  `;
+  elements.graphRoot.replaceChildren(graphLoading);
+}
+
+function waitForPaint() {
+  return new Promise((resolve) => requestAnimationFrame(() => requestAnimationFrame(resolve)));
 }
 
 function updateCurrentTimeTimer() {
@@ -160,7 +232,8 @@ function updateUrl() {
   if (state.dateKey !== getJstDateKey()) {
     params.set("date", state.dateKey);
   }
-  history.replaceState(null, "", `./?${params.toString()}`);
+  const basePath = window.location.protocol === "file:" ? "index.html" : "./";
+  history.replaceState(null, "", `${basePath}?${params.toString()}`);
 }
 
 function showMessage(text) {
@@ -174,7 +247,7 @@ function clearMessage() {
 }
 
 function showFatal(error) {
-  elements.stationName.textContent = "読み込み失敗";
+  setLoading(false);
   showMessage(error.message || "アプリを起動できませんでした");
 }
 
@@ -205,12 +278,8 @@ function getJstDateKey() {
   return `${parts.year}-${String(parts.month).padStart(2, "0")}-${String(parts.day).padStart(2, "0")}`;
 }
 
-function formatDateLabel(dateKey) {
-  const [year, month, day] = dateKey.split("-");
-  return `${year}年${Number(month)}月${Number(day)}日`;
-}
-
 function timeToFloat(time) {
   const [hour, minute] = time.split(":").map(Number);
   return hour + minute / 60;
 }
+})();

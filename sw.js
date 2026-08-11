@@ -11,6 +11,7 @@ const PRECACHE_URLS = [
   "./js/tide-graph.js",
   "./manifest.webmanifest",
   "./data/stations.json",
+  "./data/2026/TK.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png"
 ];

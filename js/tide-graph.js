@@ -1,6 +1,6 @@
 const SVG_NS = "http://www.w3.org/2000/svg";
 
-export function renderTideGraph(root, day, options) {
+function renderTideGraph(root, day, options) {
   const { dateKey, todayKey, nowParts, onPointSelect } = options;
   const width = 720;
   const height = 380;
@@ -173,3 +173,5 @@ function element(name, attrs = {}, text) {
   }
   return node;
 }
+
+window.renderTideGraph = renderTideGraph;
