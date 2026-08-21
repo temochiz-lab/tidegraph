@@ -1,48 +1,22 @@
 const STATIONS_URL = "./data/stations.json";
-const DATA_SCRIPT_VERSION = "20260811-16";
+const DATA_SCRIPT_VERSION = "20260822-1";
 
 const FALLBACK_STATIONS = [
-  { region: "北海道", code: "WN", name: "稚内" },
-  { region: "北海道", code: "B3", name: "小樽" },
-  { region: "北海道", code: "KR", name: "釧路" },
-  { region: "北海道", code: "HK", name: "函館" },
-  { region: "東北", code: "AO", name: "青森" },
-  { region: "東北", code: "MY", name: "宮古" },
-  { region: "東北", code: "AY", name: "鮎川" },
-  { region: "東北", code: "ON", name: "小名浜" },
-  { region: "関東", code: "TK", name: "東京", default: true },
-  { region: "関東", code: "QS", name: "横浜" },
-  { region: "関東", code: "CS", name: "銚子漁港" },
-  { region: "関東", code: "TT", name: "館山" },
-  { region: "中部", code: "SM", name: "清水港" },
-  { region: "中部", code: "OM", name: "御前崎" },
-  { region: "中部", code: "NG", name: "名古屋" },
-  { region: "中部", code: "TB", name: "鳥羽" },
-  { region: "北陸・日本海", code: "S6", name: "新潟西港" },
-  { region: "北陸・日本海", code: "TY", name: "富山" },
-  { region: "北陸・日本海", code: "T1", name: "金沢" },
-  { region: "北陸・日本海", code: "MZ", name: "舞鶴" },
-  { region: "北陸・日本海", code: "SK", name: "境" },
-  { region: "西日本", code: "OS", name: "大阪" },
-  { region: "西日本", code: "KB", name: "神戸" },
-  { region: "西日本", code: "TA", name: "高松" },
-  { region: "西日本", code: "KC", name: "高知" },
-  { region: "九州", code: "QF", name: "博多" },
-  { region: "九州", code: "NS", name: "長崎" },
-  { region: "九州", code: "KG", name: "鹿児島" },
-  { region: "九州", code: "AB", name: "油津" },
-  { region: "沖縄", code: "NH", name: "那覇" },
-  { region: "沖縄", code: "DJ", name: "南大東" },
-  { region: "沖縄", code: "IS", name: "石垣" },
-  { region: "沖縄", code: "YJ", name: "与那国" }
+  { region: "関東", code: "TK", name: "東京", default: true }
 ];
 
 const scriptLoads = new Map();
 
 async function loadStations() {
+  const preloaded = window.TIDEGRAPH_STATIONS?.stations;
+  if (Array.isArray(preloaded) && preloaded.length > 0) {
+    return preloaded;
+  }
+
   if (window.location.protocol === "file:") {
     return FALLBACK_STATIONS;
   }
+
   try {
     const payload = await fetchJson(STATIONS_URL, "地点一覧を読み込めません");
     if (payload && Array.isArray(payload.stations) && payload.stations.length > 0) {

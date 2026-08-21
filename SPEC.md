@@ -6,7 +6,7 @@
 
 `temochiz潮時表` は、釣り用にスマートフォンで潮位を確認するための静的Webアプリです。
 
-2026年分の潮位データをリポジトリ内に持ち、ブラウザ上で地点・日付を選ぶだけで、以下を表示します。
+2026年分の全国239地点の潮位データをリポジトリ内に持ち、ブラウザ上で地点・日付を選ぶだけで、以下を表示します。
 
 - 次の満潮・干潮
 - その日の満潮・干潮一覧
@@ -32,14 +32,15 @@ GitHub Pages 上で静的ファイルだけで動作します。通常の閲覧�
 ## アプリの起動フロー
 
 1. `index.html` が読み込まれる。
-2. 初期表示用に `data/2026/TK.js` が先に読み込まれる。
-3. `js/tide-graph.js` がSVGグラフ描画関数を `window.renderTideGraph` として登録する。
-4. `js/data.js` が地点一覧と年次データ読み込み関数を `window.TideGraphData` として登録する。
-5. `js/app.js` が起動し、URLパラメータ・localStorage・今日の日付をもとに初期状態を作る。
-6. 地点一覧を読み込み、地域ごとの `<optgroup>` として選択ボックスを構築する。
-7. 選択中の地点・日付に対応する年次データを読み込む。
-8. その日の潮位データを取り出し、満潮・干潮、潮回り、チャンスタイム、グラフを描画する。
-9. 今日の日付を表示している場合のみ、1分ごとに再描画して現在時刻の位置を更新する。
+2. 地点一覧用に `data/stations.js` が先に読み込まれる。
+3. 初期表示用に `data/2026/TK.js` が先に読み込まれる。
+4. `js/tide-graph.js` がSVGグラフ描画関数を `window.renderTideGraph` として登録する。
+5. `js/data.js` が地点一覧と年次データ読み込み関数を `window.TideGraphData` として登録する。
+6. `js/app.js` が起動し、URLパラメータ・localStorage・今日の日付をもとに初期状態を作る。
+7. 地点一覧を読み込み、地域ごとの `<optgroup>` として選択ボックスを構築する。
+8. 選択中の地点・日付に対応する年次データを読み込む。
+9. その日の潮位データを取り出し、満潮・干潮、潮回り、チャンスタイム、グラフを描画する。
+10. 今日の日付を表示している場合のみ、1分ごとに再描画して現在時刻の位置を更新する。
 
 ページ全体の自動リロードは行いません。現在時刻表示は内部の再描画で更新します。
 
@@ -72,6 +73,13 @@ GitHub Pages 上で静的ファイルだけで動作します。通常の閲覧�
 | --- | --- |
 | `data/2026/{code}.json` | 元データに近い保存形式。HTTP環境でのfallbackにも使う |
 | `data/2026/{code}.js` | `file://` でも読める同梱データ。`window.TIDEGRAPH_PRELOADED_DATA` に登録する |
+
+地点一覧も2種類の形式で持っています。
+
+| 形式 | 用途 |
+| --- | --- |
+| `data/stations.json` | 元データに近い地点一覧 |
+| `data/stations.js` | `file://` でも読める地点一覧。`window.TIDEGRAPH_STATIONS` に登録する |
 
 `file://` ではブラウザによってJSONの `fetch()` が制限されるため、地点データはJSファイルとして動的に読み込めるようにしています。
 
@@ -166,7 +174,9 @@ PWA関連ファイルは以下です。
 - `icons/icon-192.png`
 - `icons/icon-512.png`
 
-`sw.js` はアプリ本体、地点一覧、2026年の各地点JSデータ、アイコンをprecacheします。
+`sw.js` はアプリ本体、地点一覧、初期表示用の東京データ、アイコンだけをprecacheします。
+
+全国239地点分のデータは容量が大きいため、全地点を初回に事前キャッシュしません。地点を選んだときに該当地点のJSデータを読み込み、そのレスポンスをキャッシュします。これにより、地点数が増えても初回アクセスは軽いままにします。
 
 キャッシュを更新したい場合は、以下を更新します。
 
@@ -187,6 +197,7 @@ tidegraph/
 │  └─ app.css                   画面全体とSVG要素のスタイル
 ├─ data/
 │  ├─ stations.json             地点一覧
+│  ├─ stations.js               file://対応用の地点一覧
 │  └─ 2026/
 │     ├─ {code}.json            地点ごとの2026年潮位データ
 │     └─ {code}.js              file://対応用の同梱データ
@@ -220,6 +231,7 @@ tidegraph/
 | `js/data.js` | 地点一覧読み込み、年次データのJS/JSON読み込み |
 | `js/tide-graph.js` | SVGグラフ生成 |
 | `data/stations.json` | 地域別地点一覧 |
+| `data/stations.js` | `file://` 対応の地域別地点一覧 |
 | `data/2026/*.json` | 2026年の地点別潮位データ |
 | `data/2026/*.js` | `file://` 対応の地点別潮位データ |
 | `scripts/import-jma-tides.mjs` | 気象庁テキストデータの取得・変換 |
@@ -228,7 +240,7 @@ tidegraph/
 
 ## 地点一覧
 
-2026年版では、浅く全国をカバーするため、以下の地域グループを持ちます。
+2026年版では、全国239地点を以下の地域グループに分けます。
 
 - 北海道
 - 東北
@@ -237,11 +249,12 @@ tidegraph/
 - 北陸・日本海
 - 西日本
 - 九州
-- 沖縄
+- 沖縄・奄美
+- 有明・長崎
 
-地点の実体は `data/stations.json` と `js/data.js` の `FALLBACK_STATIONS` の両方にあります。
+地点の実体は `data/stations.json` と `data/stations.js` の両方にあります。
 
-`file://` で `stations.json` を読めない環境でも動かすため、`FALLBACK_STATIONS` も更新が必要です。
+`file://` で `stations.json` を読めない環境でも動かすため、`data/stations.js` も更新が必要です。通常は `scripts/sync-jma-year.mjs` で両方を同時生成します。
 
 ## データ更新手順
 
@@ -266,14 +279,26 @@ window.TIDEGRAPH_PRELOADED_DATA['2026/TK'] = { ...JSON内容... };
 
 ### 地点を追加する場合
 
-1. 気象庁の地点コードを確認する。
-2. `scripts/import-jma-tides.mjs` でJSONを作る。
-3. 対応する `{code}.js` を作る。
-4. `data/stations.json` に追加する。
-5. `js/data.js` の `FALLBACK_STATIONS` に追加する。
-6. `sw.js` の `PRECACHE_URLS` に `{code}.js` を追加する。
-7. キャッシュバージョンを更新する。
-8. テストとブラウザ確認を行う。
+通常は公式一覧から一括同期します。
+
+```bash
+node scripts/sync-jma-year.mjs --year 2026
+```
+
+このスクリプトは以下を行います。
+
+1. 気象庁の潮位表掲載地点一覧を取得する。
+2. `data/stations.json` と `data/stations.js` を生成する。
+3. 全地点の `data/2026/{code}.json` を生成する。
+4. 全地点の `data/2026/{code}.js` を生成する。
+5. `data/2026/sync-summary.md` を生成する。
+
+同期後は、必要に応じて以下を確認します。
+
+1. `sw.js` のキャッシュバージョンを更新する。
+2. `index.html` のCSS/JS参照クエリを更新する。
+3. `js/data.js` の `DATA_SCRIPT_VERSION` を更新する。
+4. テストとブラウザ確認を行う。
 
 ## テスト
 

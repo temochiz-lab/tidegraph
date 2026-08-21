@@ -5,6 +5,7 @@
   "type": "module",
   "scripts": {
     "data:import": "node scripts/import-jma-tides.mjs --year 2026 --station TK --name 東京",
+    "data:sync": "node scripts/sync-jma-year.mjs --year 2026",
     "test": "node --test"
   }
 }

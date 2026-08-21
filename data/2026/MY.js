@@ -1,4 +1,4 @@
-﻿window.TIDEGRAPH_PRELOADED_DATA = window.TIDEGRAPH_PRELOADED_DATA || {};
+window.TIDEGRAPH_PRELOADED_DATA = window.TIDEGRAPH_PRELOADED_DATA || {};
 window.TIDEGRAPH_PRELOADED_DATA['2026/MY'] = {
   "station": {
     "code": "MY",
@@ -8,7 +8,7 @@ window.TIDEGRAPH_PRELOADED_DATA['2026/MY'] = {
   "unit": "cm",
   "source": "JMA tide table",
   "sourceUrl": "https://www.data.jma.go.jp/kaiyou/data/db/tide/suisan/txt/2026/MY.txt",
-  "generatedAt": "2026-08-11T12:48:51.256Z",
+  "generatedAt": "2026-08-21T16:21:12.680Z",
   "scriptVersion": "0.1.0",
   "days": {
     "2026-01-01": {
@@ -17032,6 +17032,4 @@ window.TIDEGRAPH_PRELOADED_DATA['2026/MY'] = {
       ]
     }
   }
-}
-;
-
+};

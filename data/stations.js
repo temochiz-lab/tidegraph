@@ -1,0 +1,1203 @@
+window.TIDEGRAPH_STATIONS = 
+{
+  "stations": [
+    {
+      "region": "北海道",
+      "code": "WN",
+      "name": "稚内"
+    },
+    {
+      "region": "北海道",
+      "code": "KE",
+      "name": "枝幸"
+    },
+    {
+      "region": "北海道",
+      "code": "A0",
+      "name": "紋別"
+    },
+    {
+      "region": "北海道",
+      "code": "AS",
+      "name": "網走"
+    },
+    {
+      "region": "北海道",
+      "code": "A6",
+      "name": "羅臼"
+    },
+    {
+      "region": "北海道",
+      "code": "NM",
+      "name": "根室"
+    },
+    {
+      "region": "北海道",
+      "code": "HN",
+      "name": "花咲"
+    },
+    {
+      "region": "北海道",
+      "code": "KP",
+      "name": "霧多布"
+    },
+    {
+      "region": "北海道",
+      "code": "KR",
+      "name": "釧路"
+    },
+    {
+      "region": "北海道",
+      "code": "B1",
+      "name": "十勝"
+    },
+    {
+      "region": "北海道",
+      "code": "A9",
+      "name": "浦河"
+    },
+    {
+      "region": "北海道",
+      "code": "C8",
+      "name": "苫小牧東"
+    },
+    {
+      "region": "北海道",
+      "code": "TM",
+      "name": "苫小牧西"
+    },
+    {
+      "region": "北海道",
+      "code": "SO",
+      "name": "白老"
+    },
+    {
+      "region": "北海道",
+      "code": "A8",
+      "name": "室蘭"
+    },
+    {
+      "region": "北海道",
+      "code": "A3",
+      "name": "森"
+    },
+    {
+      "region": "北海道",
+      "code": "HK",
+      "name": "函館"
+    },
+    {
+      "region": "北海道",
+      "code": "Q0",
+      "name": "吉岡"
+    },
+    {
+      "region": "北海道",
+      "code": "A5",
+      "name": "松前"
+    },
+    {
+      "region": "北海道",
+      "code": "ES",
+      "name": "江差"
+    },
+    {
+      "region": "北海道",
+      "code": "ZP",
+      "name": "奥尻"
+    },
+    {
+      "region": "北海道",
+      "code": "OR",
+      "name": "奥尻港"
+    },
+    {
+      "region": "北海道",
+      "code": "SE",
+      "name": "瀬棚"
+    },
+    {
+      "region": "北海道",
+      "code": "B6",
+      "name": "寿都"
+    },
+    {
+      "region": "北海道",
+      "code": "B5",
+      "name": "岩内"
+    },
+    {
+      "region": "北海道",
+      "code": "Z8",
+      "name": "忍路"
+    },
+    {
+      "region": "北海道",
+      "code": "B3",
+      "name": "小樽"
+    },
+    {
+      "region": "北海道",
+      "code": "IK",
+      "name": "石狩新港"
+    },
+    {
+      "region": "北海道",
+      "code": "B2",
+      "name": "留萌"
+    },
+    {
+      "region": "北海道",
+      "code": "F3",
+      "name": "沓形"
+    },
+    {
+      "region": "北海道",
+      "code": "Q1",
+      "name": "竜飛"
+    },
+    {
+      "region": "東北",
+      "code": "AO",
+      "name": "青森"
+    },
+    {
+      "region": "東北",
+      "code": "ZA",
+      "name": "浅虫"
+    },
+    {
+      "region": "東北",
+      "code": "Q2",
+      "name": "大湊"
+    },
+    {
+      "region": "東北",
+      "code": "B4",
+      "name": "大間"
+    },
+    {
+      "region": "東北",
+      "code": "SH",
+      "name": "下北"
+    },
+    {
+      "region": "東北",
+      "code": "XS",
+      "name": "むつ小川原"
+    },
+    {
+      "region": "東北",
+      "code": "HG",
+      "name": "八戸港"
+    },
+    {
+      "region": "東北",
+      "code": "XT",
+      "name": "久慈"
+    },
+    {
+      "region": "東北",
+      "code": "MY",
+      "name": "宮古"
+    },
+    {
+      "region": "東北",
+      "code": "Q6",
+      "name": "釜石"
+    },
+    {
+      "region": "東北",
+      "code": "OF",
+      "name": "大船渡"
+    },
+    {
+      "region": "東北",
+      "code": "AY",
+      "name": "鮎川"
+    },
+    {
+      "region": "東北",
+      "code": "E6",
+      "name": "石巻"
+    },
+    {
+      "region": "東北",
+      "code": "SG",
+      "name": "塩釜"
+    },
+    {
+      "region": "東北",
+      "code": "SD",
+      "name": "仙台新港"
+    },
+    {
+      "region": "東北",
+      "code": "ZM",
+      "name": "相馬"
+    },
+    {
+      "region": "東北",
+      "code": "ON",
+      "name": "小名浜"
+    },
+    {
+      "region": "関東",
+      "code": "D1",
+      "name": "日立"
+    },
+    {
+      "region": "関東",
+      "code": "D3",
+      "name": "大洗"
+    },
+    {
+      "region": "関東",
+      "code": "D2",
+      "name": "鹿島"
+    },
+    {
+      "region": "関東",
+      "code": "CS",
+      "name": "銚子漁港"
+    },
+    {
+      "region": "関東",
+      "code": "ZF",
+      "name": "勝浦"
+    },
+    {
+      "region": "関東",
+      "code": "MR",
+      "name": "布良"
+    },
+    {
+      "region": "関東",
+      "code": "TT",
+      "name": "館山"
+    },
+    {
+      "region": "関東",
+      "code": "KZ",
+      "name": "木更津"
+    },
+    {
+      "region": "関東",
+      "code": "QL",
+      "name": "千葉"
+    },
+    {
+      "region": "関東",
+      "code": "CB",
+      "name": "千葉港"
+    },
+    {
+      "region": "関東",
+      "code": "TK",
+      "name": "東京",
+      "default": true
+    },
+    {
+      "region": "関東",
+      "code": "KW",
+      "name": "川崎"
+    },
+    {
+      "region": "関東",
+      "code": "YK",
+      "name": "京浜港"
+    },
+    {
+      "region": "関東",
+      "code": "QS",
+      "name": "横浜"
+    },
+    {
+      "region": "関東",
+      "code": "HM",
+      "name": "本牧"
+    },
+    {
+      "region": "関東",
+      "code": "QN",
+      "name": "横須賀"
+    },
+    {
+      "region": "関東",
+      "code": "Z1",
+      "name": "油壺"
+    },
+    {
+      "region": "関東",
+      "code": "OK",
+      "name": "岡田"
+    },
+    {
+      "region": "関東",
+      "code": "QO",
+      "name": "神津島"
+    },
+    {
+      "region": "関東",
+      "code": "MJ",
+      "name": "三宅島（坪田）"
+    },
+    {
+      "region": "関東",
+      "code": "QP",
+      "name": "三宅島（阿古）"
+    },
+    {
+      "region": "関東",
+      "code": "D4",
+      "name": "八丈島（八重根）"
+    },
+    {
+      "region": "関東",
+      "code": "QQ",
+      "name": "八丈島（神湊）"
+    },
+    {
+      "region": "関東",
+      "code": "CC",
+      "name": "父島"
+    },
+    {
+      "region": "関東",
+      "code": "MC",
+      "name": "南鳥島"
+    },
+    {
+      "region": "関東",
+      "code": "D8",
+      "name": "湘南港"
+    },
+    {
+      "region": "関東",
+      "code": "OD",
+      "name": "小田原"
+    },
+    {
+      "region": "中部",
+      "code": "Z3",
+      "name": "伊東"
+    },
+    {
+      "region": "中部",
+      "code": "D6",
+      "name": "下田"
+    },
+    {
+      "region": "中部",
+      "code": "QK",
+      "name": "南伊豆"
+    },
+    {
+      "region": "中部",
+      "code": "G9",
+      "name": "石廊崎"
+    },
+    {
+      "region": "中部",
+      "code": "Z4",
+      "name": "田子"
+    },
+    {
+      "region": "中部",
+      "code": "UC",
+      "name": "内浦"
+    },
+    {
+      "region": "中部",
+      "code": "SM",
+      "name": "清水港"
+    },
+    {
+      "region": "中部",
+      "code": "Z5",
+      "name": "焼津"
+    },
+    {
+      "region": "中部",
+      "code": "OM",
+      "name": "御前崎"
+    },
+    {
+      "region": "中部",
+      "code": "MI",
+      "name": "舞阪"
+    },
+    {
+      "region": "中部",
+      "code": "I4",
+      "name": "赤羽根"
+    },
+    {
+      "region": "中部",
+      "code": "G4",
+      "name": "三河"
+    },
+    {
+      "region": "中部",
+      "code": "G5",
+      "name": "形原"
+    },
+    {
+      "region": "中部",
+      "code": "G8",
+      "name": "衣浦"
+    },
+    {
+      "region": "中部",
+      "code": "ZD",
+      "name": "鬼崎"
+    },
+    {
+      "region": "中部",
+      "code": "NG",
+      "name": "名古屋"
+    },
+    {
+      "region": "中部",
+      "code": "G3",
+      "name": "四日市港"
+    },
+    {
+      "region": "中部",
+      "code": "TB",
+      "name": "鳥羽"
+    },
+    {
+      "region": "中部",
+      "code": "OW",
+      "name": "尾鷲"
+    },
+    {
+      "region": "中部",
+      "code": "KN",
+      "name": "熊野"
+    },
+    {
+      "region": "中部",
+      "code": "UR",
+      "name": "浦神"
+    },
+    {
+      "region": "中部",
+      "code": "KS",
+      "name": "串本"
+    },
+    {
+      "region": "中部",
+      "code": "SR",
+      "name": "白浜"
+    },
+    {
+      "region": "中部",
+      "code": "GB",
+      "name": "御坊"
+    },
+    {
+      "region": "中部",
+      "code": "H1",
+      "name": "下津"
+    },
+    {
+      "region": "中部",
+      "code": "Z9",
+      "name": "海南"
+    },
+    {
+      "region": "中部",
+      "code": "WY",
+      "name": "和歌山"
+    },
+    {
+      "region": "中部",
+      "code": "TN",
+      "name": "淡輪"
+    },
+    {
+      "region": "中部",
+      "code": "KK",
+      "name": "関空島"
+    },
+    {
+      "region": "西日本",
+      "code": "J2",
+      "name": "岸和田"
+    },
+    {
+      "region": "西日本",
+      "code": "IO",
+      "name": "泉大津"
+    },
+    {
+      "region": "西日本",
+      "code": "SI",
+      "name": "堺"
+    },
+    {
+      "region": "西日本",
+      "code": "OS",
+      "name": "大阪"
+    },
+    {
+      "region": "西日本",
+      "code": "AM",
+      "name": "尼崎"
+    },
+    {
+      "region": "西日本",
+      "code": "J5",
+      "name": "西宮"
+    },
+    {
+      "region": "西日本",
+      "code": "KB",
+      "name": "神戸"
+    },
+    {
+      "region": "西日本",
+      "code": "AK",
+      "name": "明石"
+    },
+    {
+      "region": "西日本",
+      "code": "ST",
+      "name": "洲本"
+    },
+    {
+      "region": "西日本",
+      "code": "EI",
+      "name": "江井"
+    },
+    {
+      "region": "西日本",
+      "code": "K1",
+      "name": "姫路（飾磨）"
+    },
+    {
+      "region": "西日本",
+      "code": "SB",
+      "name": "三蟠"
+    },
+    {
+      "region": "西日本",
+      "code": "UN",
+      "name": "宇野"
+    },
+    {
+      "region": "西日本",
+      "code": "MM",
+      "name": "水島"
+    },
+    {
+      "region": "西日本",
+      "code": "LG",
+      "name": "乙島"
+    },
+    {
+      "region": "西日本",
+      "code": "IZ",
+      "name": "糸崎"
+    },
+    {
+      "region": "西日本",
+      "code": "TH",
+      "name": "竹原"
+    },
+    {
+      "region": "西日本",
+      "code": "Q9",
+      "name": "呉"
+    },
+    {
+      "region": "西日本",
+      "code": "Q8",
+      "name": "広島"
+    },
+    {
+      "region": "西日本",
+      "code": "QA",
+      "name": "徳山"
+    },
+    {
+      "region": "西日本",
+      "code": "J9",
+      "name": "三田尻"
+    },
+    {
+      "region": "西日本",
+      "code": "WH",
+      "name": "宇部"
+    },
+    {
+      "region": "西日本",
+      "code": "CF",
+      "name": "長府"
+    },
+    {
+      "region": "西日本",
+      "code": "A1",
+      "name": "弟子待"
+    },
+    {
+      "region": "西日本",
+      "code": "TI",
+      "name": "田ノ首"
+    },
+    {
+      "region": "西日本",
+      "code": "OH",
+      "name": "大山の鼻"
+    },
+    {
+      "region": "西日本",
+      "code": "HR",
+      "name": "南風泊"
+    },
+    {
+      "region": "西日本",
+      "code": "MT",
+      "name": "松山"
+    },
+    {
+      "region": "西日本",
+      "code": "M3",
+      "name": "波止浜"
+    },
+    {
+      "region": "西日本",
+      "code": "M0",
+      "name": "今治市小島"
+    },
+    {
+      "region": "西日本",
+      "code": "M1",
+      "name": "来島航路"
+    },
+    {
+      "region": "西日本",
+      "code": "L0",
+      "name": "今治"
+    },
+    {
+      "region": "西日本",
+      "code": "NI",
+      "name": "新居浜"
+    },
+    {
+      "region": "九州",
+      "code": "L8",
+      "name": "伊予三島"
+    },
+    {
+      "region": "九州",
+      "code": "TX",
+      "name": "多度津"
+    },
+    {
+      "region": "九州",
+      "code": "AX",
+      "name": "青木"
+    },
+    {
+      "region": "九州",
+      "code": "J8",
+      "name": "与島"
+    },
+    {
+      "region": "九州",
+      "code": "TA",
+      "name": "高松"
+    },
+    {
+      "region": "九州",
+      "code": "KM",
+      "name": "小松島"
+    },
+    {
+      "region": "九州",
+      "code": "J6",
+      "name": "橘"
+    },
+    {
+      "region": "九州",
+      "code": "AW",
+      "name": "阿波由岐"
+    },
+    {
+      "region": "九州",
+      "code": "HW",
+      "name": "日和佐"
+    },
+    {
+      "region": "九州",
+      "code": "L7",
+      "name": "甲浦"
+    },
+    {
+      "region": "九州",
+      "code": "MU",
+      "name": "室戸岬"
+    },
+    {
+      "region": "九州",
+      "code": "KC",
+      "name": "高知"
+    },
+    {
+      "region": "九州",
+      "code": "V7",
+      "name": "須崎"
+    },
+    {
+      "region": "九州",
+      "code": "ZH",
+      "name": "久礼"
+    },
+    {
+      "region": "九州",
+      "code": "L6",
+      "name": "高知下田"
+    },
+    {
+      "region": "九州",
+      "code": "TS",
+      "name": "土佐清水"
+    },
+    {
+      "region": "九州",
+      "code": "SU",
+      "name": "片島"
+    },
+    {
+      "region": "九州",
+      "code": "UW",
+      "name": "宇和島"
+    },
+    {
+      "region": "九州",
+      "code": "N1",
+      "name": "日明"
+    },
+    {
+      "region": "九州",
+      "code": "N0",
+      "name": "砂津"
+    },
+    {
+      "region": "九州",
+      "code": "MO",
+      "name": "門司"
+    },
+    {
+      "region": "九州",
+      "code": "AH",
+      "name": "青浜"
+    },
+    {
+      "region": "九州",
+      "code": "O3",
+      "name": "苅田"
+    },
+    {
+      "region": "九州",
+      "code": "BP",
+      "name": "別府"
+    },
+    {
+      "region": "九州",
+      "code": "QC",
+      "name": "大分"
+    },
+    {
+      "region": "九州",
+      "code": "X5",
+      "name": "佐伯"
+    },
+    {
+      "region": "九州",
+      "code": "Z6",
+      "name": "細島"
+    },
+    {
+      "region": "九州",
+      "code": "MG",
+      "name": "宮崎"
+    },
+    {
+      "region": "九州",
+      "code": "AB",
+      "name": "油津"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "X6",
+      "name": "志布志"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "QG",
+      "name": "大泊"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "KG",
+      "name": "鹿児島"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "MK",
+      "name": "枕崎"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "ZJ",
+      "name": "阿久根"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "QH",
+      "name": "西之表"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "TJ",
+      "name": "種子島"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "QI",
+      "name": "中之島"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "QJ",
+      "name": "名瀬"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "O9",
+      "name": "奄美"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "NK",
+      "name": "中城湾港"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "ZO",
+      "name": "沖縄"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "NH",
+      "name": "那覇"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "DJ",
+      "name": "南大東"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "R1",
+      "name": "平良"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "IS",
+      "name": "石垣"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "IJ",
+      "name": "西表"
+    },
+    {
+      "region": "沖縄・奄美",
+      "code": "YJ",
+      "name": "与那国"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "O7",
+      "name": "水俣"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "O5",
+      "name": "八代"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "HS",
+      "name": "本渡瀬戸"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "RH",
+      "name": "苓北"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "MS",
+      "name": "三角"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "KU",
+      "name": "熊本"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "O6",
+      "name": "大牟田"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "OU",
+      "name": "大浦"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "KT",
+      "name": "口之津"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "NS",
+      "name": "長崎"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "KO",
+      "name": "皇后"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "FE",
+      "name": "福江"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "QD",
+      "name": "佐世保"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "X2",
+      "name": "平戸瀬戸"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "ZL",
+      "name": "仮屋"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "KA",
+      "name": "唐津"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "QF",
+      "name": "博多"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "X3",
+      "name": "郷ノ浦"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "QE",
+      "name": "厳原"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "O1",
+      "name": "対馬"
+    },
+    {
+      "region": "有明・長崎",
+      "code": "N5",
+      "name": "対馬比田勝"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "K5",
+      "name": "萩"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "ZK",
+      "name": "須佐"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "HA",
+      "name": "浜田"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "SK",
+      "name": "境"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "SA",
+      "name": "西郷"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "ZE",
+      "name": "田後"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "T6",
+      "name": "津居山"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "T2",
+      "name": "宮津"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "MZ",
+      "name": "舞鶴"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "XM",
+      "name": "敦賀"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "ZG",
+      "name": "三国"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "T1",
+      "name": "金沢"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "Z7",
+      "name": "輪島"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "SZ",
+      "name": "能登"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "XO",
+      "name": "七尾"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "XQ",
+      "name": "伏木富山"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "SN",
+      "name": "新湊"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "TY",
+      "name": "富山"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "I7",
+      "name": "生地"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "T3",
+      "name": "直江津"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "ZC",
+      "name": "柏崎"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "S6",
+      "name": "新潟西港"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "I5",
+      "name": "新潟東港"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "ZN",
+      "name": "小木"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "RZ",
+      "name": "両津"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "S0",
+      "name": "佐渡"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "QR",
+      "name": "粟島"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "ZB",
+      "name": "鼠ヶ関"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "S9",
+      "name": "酒田"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "ZQ",
+      "name": "飛島"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "S1",
+      "name": "秋田"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "S2",
+      "name": "船川港"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "ZI",
+      "name": "男鹿"
+    },
+    {
+      "region": "北陸・日本海",
+      "code": "FK",
+      "name": "深浦"
+    }
+  ]
+}
+;
+

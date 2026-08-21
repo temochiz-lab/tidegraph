@@ -1,4 +1,4 @@
-const CACHE_VERSION = "tidegraph-v0.1.7";
+const CACHE_VERSION = "tidegraph-v0.2.0";
 const APP_CACHE = `${CACHE_VERSION}-app`;
 const DATA_CACHE = `${CACHE_VERSION}-data`;
 
@@ -11,39 +11,8 @@ const PRECACHE_URLS = [
   "./js/tide-graph.js",
   "./manifest.webmanifest",
   "./data/stations.json",
-  "./data/2026/AB.js",
-  "./data/2026/AO.js",
-  "./data/2026/AY.js",
-  "./data/2026/B3.js",
-  "./data/2026/CS.js",
-  "./data/2026/DJ.js",
-  "./data/2026/HK.js",
-  "./data/2026/IS.js",
-  "./data/2026/KB.js",
-  "./data/2026/KC.js",
-  "./data/2026/KG.js",
-  "./data/2026/KR.js",
-  "./data/2026/MY.js",
-  "./data/2026/MZ.js",
-  "./data/2026/NH.js",
-  "./data/2026/NG.js",
-  "./data/2026/NS.js",
-  "./data/2026/OM.js",
-  "./data/2026/ON.js",
-  "./data/2026/OS.js",
-  "./data/2026/QS.js",
-  "./data/2026/QF.js",
-  "./data/2026/SM.js",
-  "./data/2026/S6.js",
-  "./data/2026/SK.js",
-  "./data/2026/TA.js",
-  "./data/2026/T1.js",
-  "./data/2026/TB.js",
+  "./data/stations.js",
   "./data/2026/TK.js",
-  "./data/2026/TT.js",
-  "./data/2026/TY.js",
-  "./data/2026/WN.js",
-  "./data/2026/YJ.js",
   "./icons/icon-192.png",
   "./icons/icon-512.png"
 ];
@@ -68,7 +37,7 @@ self.addEventListener("fetch", (event) => {
     return;
   }
 
-  if (url.pathname.includes("/data/") && url.pathname.endsWith(".json")) {
+  if (url.pathname.includes("/data/")) {
     event.respondWith(networkFirst(event.request));
     return;
   }
