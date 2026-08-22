@@ -1,5 +1,5 @@
 const STATIONS_URL = "./data/stations.json";
-const DATA_SCRIPT_VERSION = "20260822-1";
+const DATA_SCRIPT_VERSION = "20260823-2";
 
 const FALLBACK_STATIONS = [
   { region: "関東", code: "TK", name: "東京", default: true }

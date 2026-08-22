@@ -1,4 +1,4 @@
-const CACHE_VERSION = "tidegraph-v0.2.0";
+const CACHE_VERSION = "tidegraph-v0.2.2";
 const APP_CACHE = `${CACHE_VERSION}-app`;
 const DATA_CACHE = `${CACHE_VERSION}-data`;
 
@@ -46,14 +46,22 @@ self.addEventListener("fetch", (event) => {
 });
 
 async function cacheFirst(request) {
-  const cached = await caches.match(request);
+  const cached = await matchCached(request);
   if (cached) {
     return cached;
   }
-  const response = await fetch(request);
-  const cache = await caches.open(APP_CACHE);
-  cache.put(request, response.clone());
-  return response;
+  try {
+    const response = await fetch(request);
+    const cache = await caches.open(APP_CACHE);
+    cache.put(request, response.clone());
+    return response;
+  } catch (error) {
+    const fallback = await matchCached(request);
+    if (fallback) {
+      return fallback;
+    }
+    throw error;
+  }
 }
 
 async function networkFirst(request) {
@@ -65,10 +73,14 @@ async function networkFirst(request) {
     }
     return response;
   } catch {
-    const cached = await cache.match(request);
+    const cached = (await cache.match(request)) || (await cache.match(request, { ignoreSearch: true }));
     if (cached) {
       return cached;
     }
     throw new Error("No cached tide data");
   }
+}
+
+async function matchCached(request) {
+  return (await caches.match(request)) || (await caches.match(request, { ignoreSearch: true }));
 }
